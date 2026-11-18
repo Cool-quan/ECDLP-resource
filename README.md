@@ -1,6 +1,6 @@
 # Logical resource estimates for Shor’s elliptic-curve algorithm
 
-`metric` implements the finite-size cost model used in [ECDSAQuantum32.tex](../ECDSAQuantum/ECDSAQuantum32.tex). It estimates Toffoli and CNOT depth and count, along with peak logical qubit allocation.
+This repository implements the finite-size cost model used in the [accompanying manuscript](paper/Resource%20analysis%20of%20Shor%E2%80%99s%20elliptic%20curve%20algorithm%20with%20an%20improved%20quantum%20adder.pdf). It estimates Toffoli and CNOT depth and count, along with peak logical qubit allocation.
 
 ## Quick start
 
@@ -8,8 +8,8 @@ Run these commands from the repository root. The estimator requires Python and N
 
 ```sh
 python -m pip install numpy
-python metric/full.py
-python metric/div.py
+python full.py
+python div.py
 ```
 
 `full.py` prints the 256-bit estimates, selected windows, and qubit allocation by stage. `div.py` prints the 256-bit costs of one inversion round, inversion, and division. Both commands print to the terminal.
@@ -24,19 +24,22 @@ For the full 256-bit circuit in depth mode, the current model selects multiplica
 
 | Command from the repository root | Output |
 | --- | --- |
-| `python metric/write_iterate.py` | `metric/data/data.csv` and `metric/data/data.json` for 25, 32, 192, 256, 384, and 521 bits in depth mode. |
-| `python metric/write_iterate.py --figure` | `metric/data/figure1.csv` and `metric/data/figure1.json` for every integer bit width from 2 through 2048. |
-| `python metric/output.py --mode depth` | `metric/data/output_256_depth.csv` with gate metrics and category shares for 256-bit arithmetic subroutines and the full circuit. |
-| `python metric/output.py --mode count` | `metric/data/output_256_count.csv` using the gate-count-oriented adder and window search. |
+| `python write_iterate.py` | `data/data.csv` and `data/data.json` for 25, 32, 192, 256, 384, and 521 bits in depth mode. |
+| `python write_iterate.py --figure` | `data/figure1.csv` and `data/figure1.json` for every integer bit width from 2 through 2048. |
+| `python output.py --mode depth` | `data/output_256_depth.csv` with gate metrics and category shares for 256-bit arithmetic subroutines and the full circuit. |
+| `python output.py --mode count` | `data/output_256_count.csv` using the gate-count-oriented adder and window search. |
+| `python plot.py` | `data/figure1.png`, rendered from `data/figure1.json` using Matplotlib. |
 
-The export commands overwrite files at their output paths. Regenerate the data before using it for comparisons with the current estimator. The full figure sweep can take several minutes.
+The export commands overwrite files at their output paths. The full figure sweep can take several minutes.
 
-After generating `figure1.json`, run the following commands to render the Toffoli depth and count curves to the manuscript’s existing figure path.
+After generating `data/figure1.json`, install Matplotlib and render Fig. 1.
 
 ```sh
 python -m pip install matplotlib
-python computation/plot/plot.py --data metric/data/figure1.json --output ECDSAQuantum/picture/circuit_parameter_plot.png
+python plot.py
 ```
+
+Use `python plot.py --help` for custom input and output paths.
 
 [`write.py`](write.py) also exports formatted CSV, raw CSV, and LaTeX-formatted TSV files for the six table sizes to the current working directory.
 
